@@ -1,0 +1,140 @@
+info:
+  name: request-demo
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{url}}"
+  body:
+    type: xml
+    data: |
+      <?xml version="1.0" encoding="UTF-8"?>
+      <bru_configuration version="3.4.1">
+        <metadata>
+          <project_id>PROJ-9823-A</project_id>
+          <created_at>2026-07-01T09:47:12Z</created_at>
+          <author>System_Agent_04</author>
+          <status>active</status>
+          <encryption_key>e7f6b9c2-d34a-4b5c-8a12-0f3e8d9c2b1a</encryption_key>
+        </metadata>
+        <client_settings>
+          <timeout_ms>5000</timeout_ms>
+          <max_redirects>5</max_redirects>
+          <retry_count>3</retry_count>
+          <verify_ssl>true</verify_ssl>
+          <proxy_server>http://10.0.0.15:8080</proxy_server>
+          <cache_responses>true</cache_responses>
+          <log_level>debug</log_level>
+          <user_agent>Bru-Agent-Client/3.4</user_agent>
+          <compression>gzip</compression>
+        </client_settings>
+        <environment>
+          <name>Production</name>
+          <base_url>https://randombru.rw</base_url>
+          <variables>
+            <variable name="auth_token" type="string" secure="true">sk_live_51Ny...</variable>
+            <variable name="timeout_limit" type="number" secure="false">15000</variable>
+            <variable name="max_users" type="number" secure="false">5000</variable>
+            <variable name="region" type="string" secure="false">rw-kigali-01</variable>
+            <variable name="retry_delay" type="number" secure="false">2000</variable>
+            <variable name="maintenance_mode" type="boolean" secure="false">false</variable>
+          </variables>
+        </environment>
+        <endpoints>
+          <endpoint id="get_users">
+            <route>/users</route>
+            <method>GET</method>
+            <headers>
+              <header name="Authorization">Bearer {auth_token}</header>
+              <header name="Accept">application/json</header>
+              <header name="X-Bru-Version">3.4</header>
+              <header name="Cache-Control">no-cache</header>
+            </headers>
+            <params>
+              <param name="limit">100</param>
+              <param name="offset">0</param>
+              <param name="sort">created_at</param>
+              <param name="order">desc</param>
+              <param name="active_only">true</param>
+            </params>
+          </endpoint>
+          <endpoint id="post_data">
+            <route>/data/sync</route>
+            <method>POST</method>
+            <headers>
+              <header name="Authorization">Bearer {auth_token}</header>
+              <header name="Content-Type">application/json</header>
+            </headers>
+            <body type="json">
+              <payload>
+                <timestamp>1782985632</timestamp>
+                <device_id>DEV-8849-X</device_id>
+                <sync_status>pending</sync_status>
+                <records_processed>452</records_processed>
+                <error_code>0</error_code>
+              </payload>
+            </body>
+          </endpoint>
+          <endpoint id="delete_logs">
+            <route>/logs/cleanup</route>
+            <method>DELETE</method>
+            <headers>
+              <header name="Authorization">Bearer {auth_token}</header>
+            </headers>
+            <params>
+              <param name="older_than">30_days</param>
+              <param name="force">true</param>
+            </params>
+          </endpoint>
+          <endpoint id="update_settings">
+            <route>/config/update</route>
+            <method>PUT</method>
+            <headers>
+              <header name="Authorization">Bearer {auth_token}</header>
+              <header name="Content-Type">application/json</header>
+            </headers>
+            <body type="json">
+              <payload>
+                <auto_save>true</auto_save>
+                <theme>dark</theme>
+                <notification_sound>chime</notification_sound>
+                <session_duration>3600</session_duration>
+              </payload>
+            </body>
+          </endpoint>
+        </endpoints>
+        <security>
+          <ip_whitelist>
+            <ip>192.168.1.15</ip>
+            <ip>10.0.0.45</ip>
+            <ip>172.16.0.12</ip>
+            <ip>127.0.0.1</ip>
+            <ip>169.254.0.5</ip>
+          </ip_whitelist>
+          <ip_blacklist>
+            <ip>203.0.113.5</ip>
+            <ip>198.51.100.2</ip>
+          </ip_blacklist>
+          <allowed_algorithms>
+            <algo>RS256</algo>
+            <algo>HS512</algo>
+          </allowed_algorithms>
+          <enforce_mfa>true</enforce_mfa>
+          <session_timeout_minutes>30</session_timeout_minutes>
+        </security>
+        <logging>
+          <destination>file:///var/log/bru/system.log</destination>
+          <file_rotation_size_mb>50</file_rotation_size_mb>
+          <max_rotated_files>10</max_rotated_files>
+          <log_metrics>true</log_metrics>
+          <metrics_interval_seconds>60</metrics_interval_seconds>
+        </logging>
+      </bru_configuration>
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
